@@ -41,7 +41,7 @@ with open(metadata_template) as f:
 
 
 # zip all files
-zip_file = 'KiBuzzard-{0}-pcm.zip'.format(md['versions'][0]['version'])
+zip_file = 'KiBuzzardInternal-{0}-pcm.zip'.format(md['versions'][0]['version'])
 shutil.make_archive(Path(zip_file).stem, 'zip', 'plugin')
 
 
@@ -60,7 +60,7 @@ md['versions'][0].update({
     'install_size': uncompressed_size,
     'download_size': zip_size,
     'download_sha256': zip_sha256,
-    'download_url': 'https://github.com/gregdavill/KiBuzzard/releases/download/{0}/KiBuzzard-{0}-pcm.zip'.format(md['versions'][0]['version'])
+    'download_url': 'https://github.com/sparkfun/KiBuzzardInternal/releases/download/{0}/KiBuzzardInternal-{0}-pcm.zip'.format(md['versions'][0]['version'])
 })
     
 with open('metadata.json', 'w') as of:

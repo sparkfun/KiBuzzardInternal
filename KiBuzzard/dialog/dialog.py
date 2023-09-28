@@ -10,7 +10,7 @@ import json
 
 from . import dialog_text_base
 
-def ParseFloat(InputString, DefaultValue=0.001):
+def ParseFloat(InputString, DefaultValue=0.0):
     value = DefaultValue
     if InputString != "":
         try:
@@ -28,12 +28,16 @@ class Dialog(dialog_text_base.DIALOG_TEXT_BASE):
         'LayerComboBox': 'F.Cu',
         'CapLeftChoice': '[',
         'CapRightChoice': ']',
-        'PaddingTopCtrl': '3.75',
-        'PaddingLeftCtrl': '3.75',
-        'PaddingRightCtrl': '3.75',
-        'PaddingBottomCtrl': '3.75',
+        'PaddingTopCtrl': '5',
+        'PaddingLeftCtrl': '5',
+        'PaddingRightCtrl': '5',
+        'PaddingBottomCtrl': '5',
         'WidthCtrl': None,
-        'AlignmentChoice': 'Center'
+        'AlignmentChoice': 'Center',
+        'lineoverThicknessCtrl': '2',
+        'advancedCheckbox': None,
+        'lineoverStyleChoice': 'Rounded',
+        'inlineFormatTextbox': None
     }
 
     def __init__(self, parent, config, buzzard, func):
@@ -56,9 +60,11 @@ class Dialog(dialog_text_base.DIALOG_TEXT_BASE):
         self._layer_choices = layer_choices = ["F.Cu", "F.Paste", "F.SilkS", "F.Mask", "F.Cu/F.Mask"]
         self.m_LayerComboBox.AppendItems(layer_choices)
         self.m_LayerComboBox.SetSelection(0)
+
         self.m_HeightUnits.SetLabel("mm")
         self.m_WidthUnits.SetLabel("mm")
-        self.m_PaddingUnits.SetLabel("FUnits")
+        self.m_PaddingUnits.SetLabel("")
+        self.m_lineoverThicknessUnits.SetLabel("")
 
         best_size = self.BestSize
         # hack for some gtk themes that incorrectly calculate best size
@@ -72,7 +78,17 @@ class Dialog(dialog_text_base.DIALOG_TEXT_BASE):
         self.label_params = {}
         self.updateFootprint = None
 
+
         self.loadConfig()
+
+        if self.m_advancedCheckbox.IsChecked():
+            self.m_lineoverPanel.Show()
+            self.m_spCharPanel.Show()
+            self.m_AdvancedDivider.Show()
+        else:
+            self.m_lineoverPanel.Hide()
+            self.m_spCharPanel.Hide()
+            self.m_AdvancedDivider.Hide()
 
         self.buzzard = buzzard
 
@@ -179,8 +195,10 @@ class Dialog(dialog_text_base.DIALOG_TEXT_BASE):
         while self.label_params != self.CurrentSettings():
             self.label_params.update(self.CurrentSettings())
             self.ReGeneratePreview()
+
         self.timer.Start(milliseconds=250, oneShot=True)
         event.Skip()
+
     
     def OnCharHook( self, event ):
         if (event.GetKeyCode() == wx.WXK_RETURN) & (event.ShiftDown() | event.ControlDown()):
@@ -193,81 +211,55 @@ class Dialog(dialog_text_base.DIALOG_TEXT_BASE):
         self.label_params = {}
 
     def ReGeneratePreview(self, e=None):
-        self.polys = []
         
+        self.polys = []
         self.buzzard.fontName = self.m_FontComboBox.GetValue()
 
-        requestedHeight = ParseFloat(self.m_HeightCtrl.GetValue())
-        requestedWidth = ParseFloat(self.m_WidthCtrl.GetValue())
-        
-        if requestedHeight < self.buzzard.minHeight:
-            requestedHeight = self.buzzard.minHeight
-            self.m_HeightCtrl.SetValue(self.buzzard.minHeight)
-        
-        self.buzzard.padding.top = ParseFloat(self.m_PaddingTopCtrl.GetValue())
-        self.buzzard.padding.left = ParseFloat(self.m_PaddingLeftCtrl.GetValue())
-        self.buzzard.padding.right = ParseFloat(self.m_PaddingRightCtrl.GetValue())
-        self.buzzard.padding.bottom = ParseFloat(self.m_PaddingBottomCtrl.GetValue())
-        
-        #this was originally in buzzard.py but have moved it here in order to accomodate
-        #realtime updates of padding
-        for attr in ['left', 'right', 'top', 'bottom']:
-            if getattr(self.buzzard.padding,attr) <= 0: setattr(self.buzzard.padding, attr, 0.001) 
- 
-        #do the realtime update
-        for attr, ctrl in [('left','m_PaddingLeftCtrl'), ('right','m_PaddingRightCtrl'), ('top','m_PaddingTopCtrl'), ('bottom','m_PaddingBottomCtrl')]:            
-            getattr(self, ctrl).SetValue(getattr(self.buzzard.padding, attr,3))
-  
+        # Validate scale factor
+        scale = ParseFloat(self.m_HeightCtrl.GetValue(), 1.0)
+
+        if scale == 0:
+            if self.buzzard.scaleFactor != 0:
+                scale = self.buzzard.scaleFactor * 2.0
+            else:
+                scale = 0.01 # avoid a /0, when changing the scale.
+
+        self.buzzard.scaleFactor = scale * 0.5
+
+        DefaultPadding = 7.75 * 4 * 0.25 * (1/scale)
+        self.buzzard.padding.top = ParseFloat(self.m_PaddingTopCtrl.GetValue(), DefaultPadding) * 0.5
+        self.buzzard.padding.left = ParseFloat(self.m_PaddingLeftCtrl.GetValue(), DefaultPadding) * 0.5
+        self.buzzard.padding.right = ParseFloat(self.m_PaddingRightCtrl.GetValue(), DefaultPadding) * 0.5
+        self.buzzard.padding.bottom = ParseFloat(self.m_PaddingBottomCtrl.GetValue(), DefaultPadding) * 0.5
+
         self.buzzard.layer = self.m_LayerComboBox.GetValue()
-        self.buzzard.width = ParseFloat(self.m_WidthCtrl.GetValue(), 0.0)
+        self.buzzard.width = ParseFloat(self.m_WidthCtrl.GetValue(), 0.0) *  7.55625 * (1/scale)
 
         self.buzzard.alignment = self.m_AlignmentChoice.GetStringSelection()
 
-        #initial render with no caps to determine text-only bounding-box sizing for scaling
-        if self.m_MultiLineText.GetValue():
-            self.buzzard.leftCap = 'square'
-            self.buzzard.rightCap = 'square'
-            t=self.buzzard.renderLabel(self.m_MultiLineText.GetValue())
-        
-            textWidth=round(t.bbox()[1].x-t.bbox()[0].x,3)
-            textHeight=round(t.bbox()[1].y-t.bbox()[0].y,3)
-            self.buzzard.scaleFactor=(96/25.4)*((requestedHeight-(self.buzzard.padding.top-self.buzzard.padding.bottom))/textHeight)
-            rawScaleFactor=(self.buzzard.scaleFactor/(96/25.4))
-
-            scaledTextWidth=textWidth*rawScaleFactor            
+        if self.m_inlineFormatTextbox.IsChecked():
+            self.m_CapLeftChoice.Enable(False)
+            self.m_CapRightChoice.Enable(False)
+        else:
+            self.m_CapLeftChoice.Enable(True)
+            self.m_CapRightChoice.Enable(True)
 
         styles = {'':'', '(':'round', '[':'square', '<':'pointer', '/':'fslash', '\\':'bslash', '>':'flagtail'}
         self.buzzard.leftCap = styles[self.m_CapLeftChoice.GetStringSelection()]
 
         styles = {'':'', ')':'round', ']':'square', '>':'pointer', '/':'fslash', '\\':'bslash', '<':'flagtail'}
         self.buzzard.rightCap = styles[self.m_CapRightChoice.GetStringSelection()]
-        
-        #render again with the caps in order to calculate width modifiers
-        if self.m_MultiLineText.GetValue():
-            t=self.buzzard.renderLabel(self.m_MultiLineText.GetValue())
-            
-            labelWidth=round((t.bbox()[1].x-t.bbox()[0].x),3)
-            labelHeight=round(t.bbox()[1].y-t.bbox()[0].y,3)
-            
-            scaledLabelWidth=labelWidth*rawScaleFactor
-            scaledLabelHeight=labelHeight*rawScaleFactor
-            deltaWidth=scaledLabelWidth-scaledTextWidth
-            
-            #in order to make our item width match the requested item 
-            #width we have to adjust our our width by the requested size
-            #and the delta of the caps
-            self.buzzard.width = ParseFloat((requestedWidth-deltaWidth)/rawScaleFactor, 0.000)
-            #if (self.buzzard.leftCap != '') & (self.buzzard.rightCap != ''): #causes an error due to the fact that the bounding box is created 
-            if self.m_HeightCtrl.GetValue() < requestedHeight:
-                self.m_HeightCtrl.SetValue(scaledLabelHeight) 
-            #needed for realtime update of size since we can not set the width smaller than the bounding box created
-            #for that particular height of character.
-            #character height drives the scaling factor and thus is applied first
-            if requestedWidth<scaledLabelWidth:
-                self.m_WidthCtrl.SetValue(scaledLabelWidth)
+        self.error = None
 
-            self.error = None
-        
+        if self.m_inlineFormatTextbox.IsChecked():
+            self.buzzard.inlineFormat = True
+        else:
+            self.buzzard.inlineFormat = False
+
+        self.buzzard.lineOverThickness = int(self.m_lineoverThicknessCtrl.GetValue())    
+
+        self.buzzard.lineOverStyle = self.m_lineoverStyleChoice.GetString(self.m_lineoverStyleChoice.GetSelection())
+
         if len(self.m_MultiLineText.GetValue()) == 0:
             self.RePaint()
             return
@@ -281,13 +273,12 @@ class Dialog(dialog_text_base.DIALOG_TEXT_BASE):
             import traceback
             traceback.print_exc()
 
-        self.RePaint()        
+        self.RePaint()
 
     def RePaint(self, e=None):
         self.Layout()
         self.Refresh()
         self.Update()
-
 
     def OnPaint(self, e):
         dc = wx.PaintDC(self.m_PreviewPanel)
@@ -346,3 +337,42 @@ class Dialog(dialog_text_base.DIALOG_TEXT_BASE):
         self.saveConfig()
         
         self.func(self, self.buzzard)
+
+    def advancedModeChange(self, event):
+        if self.m_advancedCheckbox.IsChecked():
+            self.m_lineoverPanel.Show()
+            self.m_spCharPanel.Show()
+            self.m_AdvancedDivider.Show()
+        else:
+            self.m_lineoverPanel.Hide()
+            self.m_spCharPanel.Hide()
+            self.m_AdvancedDivider.Hide()
+            self.m_inlineFormatTextbox.SetValue(False)
+            self.buzzard.inlineFormat = False
+            self.ReGeneratePreview()
+
+        self.RePaint()
+
+    def inlineFormatChange(self, event):
+        self.ReGeneratePreview()
+
+    def thicknessCtrlChange(self, event):
+        self.ReGeneratePreview()
+
+    def lineoverStyleChange(self, event):
+        self.ReGeneratePreview()
+
+    def addCharOhm(self, event):
+        self.m_MultiLineText.SetValue(self.m_MultiLineText.GetValue()+"Ω")
+
+    def addCharMu(self, event):
+        self.m_MultiLineText.SetValue(self.m_MultiLineText.GetValue()+"µ")
+
+    def addCharSup2(self, event):
+        self.m_MultiLineText.SetValue(self.m_MultiLineText.GetValue()+"²")
+
+    def addCharDegree(self, event):
+        self.m_MultiLineText.SetValue(self.m_MultiLineText.GetValue()+"°")
+
+    def addCharNumero(self, event):
+        self.m_MultiLineText.SetValue(self.m_MultiLineText.GetValue()+"№")

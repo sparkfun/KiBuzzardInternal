@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version 3.10.1-88b0f50)
+## Python code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
@@ -68,7 +68,7 @@ class DIALOG_TEXT_BASE ( DialogShim ):
         m_MultiLineSizer.Add( self.m_MultiLineText, 1, wx.EXPAND|wx.BOTTOM|wx.RIGHT|wx.LEFT, 5 )
 
 
-        bMainSizer.Add( m_MultiLineSizer, 20, wx.EXPAND|wx.ALL, 10 )
+        bMainSizer.Add( m_MultiLineSizer, 1, wx.EXPAND|wx.ALL, 10 )
 
         m_SingleLineSizer = wx.BoxSizer( wx.VERTICAL )
 
@@ -81,7 +81,7 @@ class DIALOG_TEXT_BASE ( DialogShim ):
         m_SingleLineSizer.Add( self.m_PreviewPanel, 1, wx.ALL|wx.EXPAND, 5 )
 
 
-        bMainSizer.Add( m_SingleLineSizer, 20, wx.EXPAND|wx.BOTTOM|wx.RIGHT|wx.LEFT, 10 )
+        bMainSizer.Add( m_SingleLineSizer, 1, wx.BOTTOM|wx.RIGHT|wx.LEFT|wx.EXPAND, 10 )
 
         fgSizerSetup = wx.FlexGridSizer( 0, 5, 4, 0 )
         fgSizerSetup.AddGrowableCol( 1 )
@@ -116,8 +116,8 @@ class DIALOG_TEXT_BASE ( DialogShim ):
 
         fgSizerSetup.Add( self.m_HeightLabel, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 5 )
 
-        self.m_HeightCtrl = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 128, 0, 0.25 )
-        self.m_HeightCtrl.SetDigits( 3 )
+        self.m_HeightCtrl = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+        self.m_HeightCtrl.SetMaxLength( 0 )
         fgSizerSetup.Add( self.m_HeightCtrl, 0, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
 
         self.m_HeightUnits = wx.StaticText( self, wx.ID_ANY, _(u"unit"), wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -140,8 +140,8 @@ class DIALOG_TEXT_BASE ( DialogShim ):
 
         fgSizerSetup.Add( self.m_WidthLabel, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, 5 )
 
-        self.m_WidthCtrl = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 128, 0, 0.25 )
-        self.m_WidthCtrl.SetDigits( 3 )
+        self.m_WidthCtrl = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+        self.m_WidthCtrl.SetMaxLength( 0 )
         fgSizerSetup.Add( self.m_WidthCtrl, 0, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
 
         self.m_WidthUnits = wx.StaticText( self, wx.ID_ANY, _(u"unit"), wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -178,7 +178,7 @@ class DIALOG_TEXT_BASE ( DialogShim ):
         fgSizerSetup.Add( self.m_LayerComboBox, 0, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
 
 
-        bMainSizer.Add( fgSizerSetup, 0, wx.EXPAND|wx.RIGHT|wx.LEFT, 10 )
+        bMainSizer.Add( fgSizerSetup, 0, wx.RIGHT|wx.LEFT|wx.EXPAND, 10 )
 
 
         bMainSizer.Add( ( 0, 0), 0, wx.TOP, 5 )
@@ -198,21 +198,6 @@ class DIALOG_TEXT_BASE ( DialogShim ):
         self.m_PaddingLabel.Wrap( -1 )
 
         fgSizerPadding.Add( self.m_PaddingLabel, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, 5 )
-
-
-        fgSizerPadding.Add( ( 0, 0), 1, wx.EXPAND, 5 )
-
-
-        fgSizerPadding.Add( ( 0, 0), 1, wx.EXPAND, 5 )
-
-
-        fgSizerPadding.Add( ( 0, 0), 1, wx.EXPAND, 5 )
-
-
-        fgSizerPadding.Add( ( 0, 0), 1, wx.EXPAND, 5 )
-
-
-        fgSizerPadding.Add( ( 0, 0), 1, wx.EXPAND, 5 )
 
         self.m_PaddingTopLabel = wx.StaticText( self, wx.ID_ANY, _(u"Top"), wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_PaddingTopLabel.Wrap( -1 )
@@ -240,21 +225,29 @@ class DIALOG_TEXT_BASE ( DialogShim ):
 
         fgSizerPadding.Add( ( 0, 0), 1, wx.EXPAND, 5 )
 
-        self.m_PaddingTopCtrl = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 100, 0, 1 )
-        self.m_PaddingTopCtrl.SetDigits( 3 )
-        fgSizerPadding.Add( self.m_PaddingTopCtrl, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+        self.m_PaddingTopCtrl = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+        self.m_PaddingTopCtrl.SetMaxLength( 0 )
+        self.m_PaddingTopCtrl.SetMinSize( wx.Size( 64,-1 ) )
 
-        self.m_PaddingLeftCtrl = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 100, 0, 1 )
-        self.m_PaddingLeftCtrl.SetDigits( 3 )
-        fgSizerPadding.Add( self.m_PaddingLeftCtrl, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+        fgSizerPadding.Add( self.m_PaddingTopCtrl, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
 
-        self.m_PaddingRightCtrl = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 100, 0, 1 )
-        self.m_PaddingRightCtrl.SetDigits( 3 )
-        fgSizerPadding.Add( self.m_PaddingRightCtrl, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+        self.m_PaddingLeftCtrl = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+        self.m_PaddingLeftCtrl.SetMaxLength( 0 )
+        self.m_PaddingLeftCtrl.SetMinSize( wx.Size( 64,-1 ) )
 
-        self.m_PaddingBottomCtrl = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 100, 0, 1 )
-        self.m_PaddingBottomCtrl.SetDigits( 3 )
-        fgSizerPadding.Add( self.m_PaddingBottomCtrl, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+        fgSizerPadding.Add( self.m_PaddingLeftCtrl, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+
+        self.m_PaddingRightCtrl = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+        self.m_PaddingRightCtrl.SetMaxLength( 0 )
+        self.m_PaddingRightCtrl.SetMinSize( wx.Size( 64,-1 ) )
+
+        fgSizerPadding.Add( self.m_PaddingRightCtrl, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+
+        self.m_PaddingBottomCtrl = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.TE_PROCESS_ENTER )
+        self.m_PaddingBottomCtrl.SetMaxLength( 0 )
+        self.m_PaddingBottomCtrl.SetMinSize( wx.Size( 64,-1 ) )
+
+        fgSizerPadding.Add( self.m_PaddingBottomCtrl, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
 
         self.m_PaddingUnits = wx.StaticText( self, wx.ID_ANY, _(u"unit"), wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_PaddingUnits.Wrap( -1 )
@@ -262,15 +255,114 @@ class DIALOG_TEXT_BASE ( DialogShim ):
         fgSizerPadding.Add( self.m_PaddingUnits, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 5 )
 
 
-        fgSizerPadding.Add( ( 0, 0), 1, wx.EXPAND, 5 )
-
-
         bMainSizer.Add( fgSizerPadding, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 10 )
 
         self.m_staticline = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-        bMainSizer.Add( self.m_staticline, 0, wx.EXPAND|wx.TOP|wx.RIGHT|wx.LEFT, 10 )
+        bMainSizer.Add( self.m_staticline, 0, wx.EXPAND|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
+
+        self.m_lineoverPanel = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_lineoverPanel.Hide()
+
+        fgSizerLineover = wx.FlexGridSizer( 3, 5, 0, 4 )
+        fgSizerLineover.SetFlexibleDirection( wx.BOTH )
+        fgSizerLineover.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+
+        self.m_lineoverLabel = wx.StaticText( self.m_lineoverPanel, wx.ID_ANY, _(u"Lineover:"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_lineoverLabel.Wrap( -1 )
+
+        fgSizerLineover.Add( self.m_lineoverLabel, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, 5 )
+
+        self.m_lineoverStyleLabel = wx.StaticText( self.m_lineoverPanel, wx.ID_ANY, _(u"Style"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_lineoverStyleLabel.Wrap( -1 )
+
+        fgSizerLineover.Add( self.m_lineoverStyleLabel, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+        self.m_lineoverThicknessLabel = wx.StaticText( self.m_lineoverPanel, wx.ID_ANY, _(u"Thickness"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_lineoverThicknessLabel.Wrap( -1 )
+
+        fgSizerLineover.Add( self.m_lineoverThicknessLabel, 1, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+
+        fgSizerLineover.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+
+        fgSizerLineover.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+
+        fgSizerLineover.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+        m_lineoverStyleChoiceChoices = [ _(u"Square"), _(u"Rounded") ]
+        self.m_lineoverStyleChoice = wx.Choice( self.m_lineoverPanel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_lineoverStyleChoiceChoices, 0 )
+        self.m_lineoverStyleChoice.SetSelection( 0 )
+        fgSizerLineover.Add( self.m_lineoverStyleChoice, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+
+        self.m_lineoverThicknessCtrl = wx.TextCtrl( self.m_lineoverPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        fgSizerLineover.Add( self.m_lineoverThicknessCtrl, 1, wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
+
+        self.m_lineoverThicknessUnits = wx.StaticText( self.m_lineoverPanel, wx.ID_ANY, _(u"unit"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_lineoverThicknessUnits.Wrap( -1 )
+
+        fgSizerLineover.Add( self.m_lineoverThicknessUnits, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 5 )
+
+
+        fgSizerLineover.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+
+        self.m_lineoverPanel.SetSizer( fgSizerLineover )
+        self.m_lineoverPanel.Layout()
+        fgSizerLineover.Fit( self.m_lineoverPanel )
+        bMainSizer.Add( self.m_lineoverPanel, 0, wx.EXPAND|wx.TOP|wx.RIGHT|wx.LEFT, 5 )
+
+        self.m_spCharPanel = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_spCharPanel.Hide()
+
+        fgSizerSpChar = wx.FlexGridSizer( 0, 6, 0, 4 )
+        fgSizerSpChar.SetFlexibleDirection( wx.BOTH )
+        fgSizerSpChar.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+
+        self.m_spCharLabel = wx.StaticText( self.m_spCharPanel, wx.ID_ANY, _(u"Special Characters:"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_spCharLabel.Wrap( -1 )
+
+        fgSizerSpChar.Add( self.m_spCharLabel, 0, wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 5 )
+
+        self.m_spCharOhm = wx.Button( self.m_spCharPanel, wx.ID_ANY, _(u" Ω "), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT )
+        fgSizerSpChar.Add( self.m_spCharOhm, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+
+        self.m_spCharMu = wx.Button( self.m_spCharPanel, wx.ID_ANY, _(u" μ "), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT )
+        fgSizerSpChar.Add( self.m_spCharMu, 0, wx.TOP|wx.BOTTOM, 5 )
+
+        self.m_spCharHyp2 = wx.Button( self.m_spCharPanel, wx.ID_ANY, _(u" ² "), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT )
+        fgSizerSpChar.Add( self.m_spCharHyp2, 0, wx.TOP|wx.BOTTOM, 5 )
+
+        self.m_spCharDegree = wx.Button( self.m_spCharPanel, wx.ID_ANY, _(u" ° "), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT )
+        fgSizerSpChar.Add( self.m_spCharDegree, 0, wx.TOP|wx.BOTTOM, 5 )
+
+        self.m_spCharNumero = wx.Button( self.m_spCharPanel, wx.ID_ANY, _(u" № "), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT )
+        fgSizerSpChar.Add( self.m_spCharNumero, 0, wx.TOP|wx.BOTTOM, 5 )
+
+        self.m_inlineFormatTextbox = wx.CheckBox( self.m_spCharPanel, wx.ID_ANY, _(u"Inline Formatting"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        fgSizerSpChar.Add( self.m_inlineFormatTextbox, 0, wx.BOTTOM|wx.LEFT, 5 )
+
+
+        self.m_spCharPanel.SetSizer( fgSizerSpChar )
+        self.m_spCharPanel.Layout()
+        fgSizerSpChar.Fit( self.m_spCharPanel )
+        bMainSizer.Add( self.m_spCharPanel, 0, wx.RIGHT|wx.LEFT|wx.EXPAND, 5 )
+
+        self.m_AdvancedDivider = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        self.m_AdvancedDivider.Hide()
+
+        bMainSizer.Add( self.m_AdvancedDivider, 0, wx.EXPAND |wx.ALL, 5 )
 
         lowerSizer = wx.BoxSizer( wx.HORIZONTAL )
+
+        bSizer5 = wx.BoxSizer( wx.VERTICAL )
+
+        self.m_advancedCheckbox = wx.CheckBox( self, wx.ID_ANY, _(u"Advanced"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer5.Add( self.m_advancedCheckbox, 0, wx.ALL, 5 )
+
+
+        lowerSizer.Add( bSizer5, 1, wx.ALL, 5 )
 
 
         lowerSizer.Add( ( 0, 0), 1, wx.EXPAND, 5 )
@@ -297,11 +389,25 @@ class DIALOG_TEXT_BASE ( DialogShim ):
         # Connect Events
         self.Bind( wx.EVT_INIT_DIALOG, self.OnInitDlg )
         self.m_MultiLineText.Bind( wx.EVT_CHAR_HOOK, self.OnCharHook )
+        self.m_HeightCtrl.Bind( wx.EVT_TEXT_ENTER, self.OnOkClick )
+        self.m_WidthCtrl.Bind( wx.EVT_TEXT_ENTER, self.OnOkClick )
+        self.m_PaddingTopCtrl.Bind( wx.EVT_TEXT_ENTER, self.OnOkClick )
+        self.m_PaddingLeftCtrl.Bind( wx.EVT_TEXT_ENTER, self.OnOkClick )
+        self.m_PaddingRightCtrl.Bind( wx.EVT_TEXT_ENTER, self.OnOkClick )
+        self.m_PaddingBottomCtrl.Bind( wx.EVT_TEXT_ENTER, self.OnOkClick )
+        self.m_lineoverStyleChoice.Bind( wx.EVT_CHOICE, self.lineoverStyleChange )
+        self.m_lineoverThicknessCtrl.Bind( wx.EVT_TEXT, self.thicknessCtrlChange )
+        self.m_spCharOhm.Bind( wx.EVT_BUTTON, self.addCharOhm )
+        self.m_spCharMu.Bind( wx.EVT_BUTTON, self.addCharMu )
+        self.m_spCharHyp2.Bind( wx.EVT_BUTTON, self.addCharSup2 )
+        self.m_spCharDegree.Bind( wx.EVT_BUTTON, self.addCharDegree )
+        self.m_spCharNumero.Bind( wx.EVT_BUTTON, self.addCharNumero )
+        self.m_inlineFormatTextbox.Bind( wx.EVT_CHECKBOX, self.inlineFormatChange )
+        self.m_advancedCheckbox.Bind( wx.EVT_CHECKBOX, self.advancedModeChange )
         self.m_sdbSizerOK.Bind( wx.EVT_BUTTON, self.OnOkClick )
 
     def __del__( self ):
         pass
-
 
     # Virtual event handlers, override them in your derived class
     def OnInitDlg( self, event ):
@@ -313,4 +419,29 @@ class DIALOG_TEXT_BASE ( DialogShim ):
     def OnOkClick( self, event ):
         pass
 
+    def lineoverStyleChange( self, event ):
+        pass
 
+    def thicknessCtrlChange( self, event ):
+        pass
+
+    def addCharOhm( self, event ):
+        pass
+
+    def addCharMu( self, event ):
+        pass
+
+    def addCharSup2( self, event ):
+        pass
+
+    def addCharDegree( self, event ):
+        pass
+
+    def addCharNumero( self, event ):
+        pass
+
+    def inlineFormatChange( self, event ):
+        pass
+
+    def advancedModeChange( self, event ):
+        pass
