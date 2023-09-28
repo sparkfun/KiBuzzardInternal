@@ -18,12 +18,6 @@ This Fork of KiBuzzard adds an "Advanced" checkbox which reveals new (old) featu
 - Tag endcap styles can be typed in-line using the classic `(your text here>` syntax
 - Buttons added to interface for commonly used special characters (Ω,µ,²,°,№)
 
-## Compatibility
-This plugin has been designed to work on all platforms (Win, Linux, Mac) and with both Current KiCad 5.1, 6.0 and Nightly Releases.
-
-    Note: currently in v5 the labels are placed at 0,0 when created. 
-    With Nightly they are copied to the clipboard and can be placed interactively.
-
 ## Installation
 
 ### KiCad Plugin and Content Manager (v6+)
